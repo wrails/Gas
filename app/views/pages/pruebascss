@@ -1,0 +1,35 @@
+<style>
+      /* Always set the map height explicitly to define the size of the div
+
+      * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }     
+</style>
+
+
+<style>
+/* Mejor centrado */
+html, body, #map_canvas {
+    height: 500px;
+    width: 500px;
+    margin: 0px;
+    padding: 0px
+}
+.labels {
+    color: white;
+    background-color: red;
+    font-family:"Lucida Grande", "Arial", sans-serif;
+    font-size: 10px;
+    text-align: center;
+    width: 30px;
+    white-space: nowrap;
+}
+
+</style>

@@ -1,0 +1,113 @@
+<h1>BLANK MAP PAGE</h1>
+
+
+<div id="map"></div> 
+<!-- http://maps.google.com/mapfiles/kml/shapes/gas_stations.png this is the Gas Sation Icon-->
+<script>
+var map, infoWindow, service;
+
+function initMap() {
+map = new google.maps.Map(document.getElementById('map'), {
+  center: {lat: 0, lng: 0},
+  zoom: 13
+});
+infoWindow = new google.maps.InfoWindow;  // infoWindow for user current position 
+info = new google.maps.InfoWindow();   // infoWindow for places on Markers
+// Try HTML5 geolocation.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      infoWindow.setPosition(pos);
+      infoWindow.setContent('I AM HERE!!');
+      infoWindow.open(map);
+      map.setCenter(pos);
+      
+      var service = new google.maps.places.PlacesService(map);
+      service.nearbySearch({
+        location: pos,
+        radius: 7000,
+        type: ['gas_station']
+      }, callback);
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
+
+}
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+infoWindow.setPosition(pos);
+infoWindow.setContent(browserHasGeolocation ?
+                      'Error: The Geolocation service failed.' :
+                      'Error: Your browser doesn\'t support geolocation.');
+infoWindow.open(map);
+}
+
+function callback(results, status) {
+  if (status == google.maps.places.PlacesServiceStatus.OK) {
+    for (var i = 0; i < results.length; i++) {
+      var place = results[i];
+      createMarker(results[i]);
+    }
+  }
+}
+
+var markerIcon = {
+  url: 'http://image.flaticon.com/icons/svg/252/252025.svg',
+size: new google.maps.Size(20, 32)
+};
+
+
+
+/*var markerIcon = {
+  url: 'http://image.flaticon.com/icons/svg/252/252025.svg',
+  size: new google.maps.Size(71, 71),
+  origin: new google.maps.Point(0, 0), // used if icon is a part of sprite, indicates image position in sprite
+  anchor: new google.maps.Point(20,40), // lets offset the marker image
+  scaledSize: new google.maps.Size(25, 25)
+};*/
+
+function createMarker(place) {
+      var placeLoc = place.geometry.location;
+      var marker = new google.maps.Marker({
+      	icon: markerIcon,
+        map: map,
+        animation: google.maps.Animation.DROP,
+        position: place.geometry.location,
+        label: { 
+            text: '£1.23',
+            color: "#0010E8" 
+            }
+      });
+
+
+
+      google.maps.event.addListener(marker, 'click', function() {
+        info.setContent(place.name);
+        info.open(map, this);
+        //        alert(label)
+      });
+}
+ </script>
+
+<style>
+      /* Always set the map height explicitly to define the size of the div
+
+      * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }     
+</style>
